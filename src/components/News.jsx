@@ -10,7 +10,7 @@ const News  = (props)=>{
       const [page,setPage]= useState(1)
       const [totalResults,setTotalResults]= useState(0)
       const [loading,setLoading]= useState(true)
-      // document.title = `${this.capitalize(props.category)} - NewsMonkey`
+   
 
   // functional based me prop types end me likhte hai
 
@@ -86,17 +86,19 @@ const News  = (props)=>{
 
     useEffect(()=>{
       // plays the role of cdm
+      document.title = `${capitalize(props.category)} - NewsMonkey`
     updateNews()
     },[])
   
 
-    console.log("Rendering News component");
-    console.log("Articles in state:", articles);
+  
     return (
       <>
 
 
-        <h2 className="text-center">NewsMonkey - Top {capitalize(props.category)} Headlines</h2>
+        <h1 className="text-center" style={{margin: "61px"}}>NewsMonkey - Top {capitalize(props.category)} Headlines</h1>
+
+
 
           {loading && <Spinner/>}
 
