@@ -139,7 +139,7 @@ export class News extends Component {
 
           console.log("Hey! I am here")
          
-         return <div className="col-md-4" key={element.url}><Newsitem title={element.title} description={element.description} author={element.author} url={element.url} imageUrl = {element.urlToImage} date = {element.publishedAt} /></div>
+         return <div className="col-md-4" key={element.url}><Newsitem title={element.title} description={element.description} author={element.author} url={element.url} imageUrl = {element.urlToImage} date = {element.publishedAt} source={element.source.name} /></div>
         })} 
 
 </div>
