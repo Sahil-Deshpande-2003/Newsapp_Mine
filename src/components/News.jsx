@@ -1,29 +1,26 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
 import propTypes from 'prop-types'
 import Newsitem from './Newsitem'
 import Spinner from './Spinner';
 import InfiniteScroll from "react-infinite-scroll-component";
-export class News extends Component {
-   
-  static defaultProps = {
-    country: 'in',
-    pageSize: 5
-  }
+const News  = (props)=>{
 
-  static propTypes= {
-    country: propTypes.string,
-    pageSize : propTypes.number,
-    category:propTypes.string,
-  }
 
-  fetchMoreData = async()=>{
+      const [articles,setArticles]= useState([])
+      const [page,setPage]= useState(1)
+      const [totalResults,setTotalResults]= useState(0)
+      const [loading,setLoading]= useState(true)
+      // document.title = `${this.capitalize(props.category)} - NewsMonkey`
 
-    this.setState({
-      page:this.state.page+1,
+  // functional based me prop types end me likhte hai
 
-    })
 
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
+  const fetchMoreData = async()=>{
+
+
+    setPage(page+1)
+
+    let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`
 
   
 
@@ -38,15 +35,14 @@ export class News extends Component {
 
     //
     
-    this.setState({
-      articles:this.state.articles.concat(parsedData.articles),
-   
-      totalResults:parsedData.totalResults,
-      loading:false,      
-    })
+    
+
+    setArticles(articles.concat(parsedData.articles))
+    setTotalResults(parsedData.totalResults)
+    setLoading(false)
   }
 
-  capitalize = (s) => {
+  const capitalize = (s) => {
 
     return s.charAt(0).toUpperCase() + s.slice(1)
 
@@ -54,95 +50,62 @@ export class News extends Component {
 
 
 
-      constructor(props){
-        console.log("Inside News constructor")
-        super(props);
-
-        this.state = {
-
-          // not this.state.articles here
-
-          articles:[],
-          loading:false,
-          page:1,
-          totalResults:0,
-        }
-
-        // To use this line   document.title = `${this.props.category}`, I dont have access of props inside the constructor directly, hence I pass props as argument to the constructor
-
-
-        document.title = `${this.capitalize(this.props.category)} - NewsMonkey`
-
-        
-      }
-
-      updateNews = async() => {
+     const updateNews = async() => {
 
       
 
-        this.setState({
-          loading:true
-        })
+        setLoading(true)
+        let url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${props.category}&apiKey=${props.apiKey}&page=${page}&pageSize=${props.pageSize}`
 
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
-
-        this.props.setProgress(30);
+        props.setProgress(30);
 
         let data = await fetch(url);
         console.log("Fetched data")
 
-        this.props.setProgress(60);
+        props.setProgress(60);
         
         let parsedData = await data.json();
         console.log("Parsed data")
 
       
     
-        this.props.setProgress(100);
+        props.setProgress(100);
         
         //
+
+        setArticles(parsedData.articles)
+        setTotalResults(parsedData.totalResults)
+        setLoading(false)
         
-        this.setState({
-          articles:parsedData.articles,
-       
-          totalResults:parsedData.totalResults,
-          loading:false,      
-        })
+   
     
       }
 
       
 
 
+    useEffect(()=>{
+      // plays the role of cdm
+    updateNews()
+    },[])
+  
 
-        
-  componentDidMount = async() => {
-    
-    // we have hardcoded articles here, to fetch data dynamically from url use cdm
-    // <News pageSize={5}  key="general" country="in" apiKey="524be655ed644951bdc2ae78c8711c0e" category="general" />}
-
-    this.updateNews();
-    
-
-  }
-
-  render() {
     console.log("Rendering News component");
-    console.log("Articles in state:", this.state.articles);
+    console.log("Articles in state:", articles);
     return (
       <>
 
 
-        <h2 className="text-center">NewsMonkey - Top {this.capitalize(this.props.category)} Headlines</h2>
+        <h2 className="text-center">NewsMonkey - Top {capitalize(props.category)} Headlines</h2>
 
-          {this.state.loading && <Spinner/>}
+          {loading && <Spinner/>}
 
       <InfiniteScroll
         
-          dataLength={this.state.articles.length}
-          next={this.fetchMoreData}
+          dataLength={articles.length}
+          next={fetchMoreData}
           // hasMore ka condition nahi samjha??????
-          hasMore={this.state.articles.length!=this.state.totalResults}
+          hasMore={articles.length!=totalResults}
           loader={<Spinner/>}
         > 
 
@@ -151,7 +114,7 @@ export class News extends Component {
         <div className="row my-3">
         
 
-        {!this.state.loading && this.state.articles.map((element)=>{
+        {!loading && articles.map((element)=>{
 
 
           console.log("Hey! I am here")
@@ -164,12 +127,24 @@ export class News extends Component {
 
  </InfiniteScroll>
 
-
+   
 
   
       </>
     )
-  }
+  
 }
+
+News.defaultProps = {
+  country: 'in',
+  pageSize: 5
+}
+
+News. propTypes= {
+  country: propTypes.string,
+  pageSize : propTypes.number,
+  category:propTypes.string,
+}
+
 
 export default News
