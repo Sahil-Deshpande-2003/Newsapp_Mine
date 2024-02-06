@@ -28,7 +28,7 @@ export class Newsitem extends Component {
         <div className="card">
   <img src={this.props.imageUrl!=null?this.props.imageUrl:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_icnonsILxOwjnB_JigBAq9s_l0WcRZ6DVw&usqp=CAU"} className="card-img-top" alt="..."/>
   <div className="card-body">
-    <h5 className="card-title">{this.props.title!=null?this.props.title:"Unknown"} <span className="badge bg-secondary">New</span><span className="position-absolute top-0  translate-middle badge rounded-pill bg-danger" style={{left:'90%',zIndex:1}}> {this.props.source}</span></h5>
+    <h5 className="card-title">{this.props.title!=null?this.props.title:"Unknown"} <span className="badge bg-secondary">New</span><span className="position-absolute top-0  translate-middle badge rounded-pill bg-danger my-2" style={{left:'90%',zIndex:1}}> {this.props.source}</span></h5>
     <p className="card-text">{this.props.description!=null?this.props.description:"Unknown"}</p>
     <p className="card-text"><small className="text-body-secondary">By {this.props.author!=null?this.props.author:"Unknown"} on {new Date(this.props.date).toGMTString()}</small></p>
     <a href={this.props.url!=null?this.props.url:""} className="btn btn-primary" target= "_blank">Read More</a>

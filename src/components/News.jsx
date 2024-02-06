@@ -15,9 +15,15 @@ export class News extends Component {
     category:propTypes.string,
   }
 
-      constructor(){
+  capitalize = (s) => {
+
+    return s.charAt(0).toUpperCase() + s.slice(1)
+
+  }
+
+      constructor(props){
         console.log("Inside News constructor")
-        super();
+        super(props);
 
         this.state = {
 
@@ -28,6 +34,11 @@ export class News extends Component {
           page:1,
           totalResults:0,
         }
+
+        // To use this line   document.title = `${this.props.category}`, I dont have access of props inside the constructor directly, hence I pass props as argument to the constructor
+
+
+        document.title = `${this.capitalize(this.props.category)} - NewsMonkey`
 
         
       }
@@ -97,7 +108,7 @@ export class News extends Component {
       <div className='container my-3'>
 
 
-        <h2 className="text-center">NewsMonkey - Top Headlines</h2>
+        <h2 className="text-center">NewsMonkey - Top {this.capitalize(this.props.category)} Headlines</h2>
 
           {this.state.loading && <Spinner/>}
         <div className="row my-3">
