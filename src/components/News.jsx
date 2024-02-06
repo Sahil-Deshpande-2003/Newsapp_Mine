@@ -32,46 +32,50 @@ export class News extends Component {
         
       }
 
-      handlePrevClick = async() => {
+      updateNews = async() => {
+
         this.setState({
           loading:true
         })
 
-        // look at the sample response on news api website, it says category should come before apiKey in the url
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page-1}&pageSize=${this.props.pageSize}`
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page}&pageSize=${this.props.pageSize}`
 
         let data = await fetch(url);
-    
+        console.log("Fetched data")
+        
         let parsedData = await data.json();
+        console.log("Parsed data")
     
+      
+        
         //
-    
+        
         this.setState({
           articles:parsedData.articles,
-          page:this.state.page-1,
-          loading:false,
+       
+          totalResults:parsedData.totalResults,
+          loading:false,      
         })
+    
+      }
+
+      handlePrevClick = async() => {
+        
+        this.setState({
+          page:this.state.page-1,
+        })
+
+        this.updateNews();
     
       }
 
 
       handleNextClick = async() => {
         this.setState({
-          loading:true
-        })
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=${this.state.page+1}&pageSize=${this.props.pageSize}`
-
-        let data = await fetch(url);
-    
-        let parsedData = await data.json();
-    
-        //
-    
-        this.setState({
-          articles:parsedData.articles,
           page:this.state.page+1,
-          loading:false,          
         })
+
+        this.updateNews();
     
       }
 
@@ -81,42 +85,7 @@ export class News extends Component {
     // we have hardcoded articles here, to fetch data dynamically from url use cdm
     // <News pageSize={5}  key="general" country="in" apiKey="524be655ed644951bdc2ae78c8711c0e" category="general" />}
 
-    console.log("cdm")
-    this.setState({
-      loading:true
-    })
-
-    console.log("Inside cdm")
-
-    console.log("category = " + `${this.props.category}`)
-    console.log("country = " + `${this.props.country}`)
-    console.log("apiKey = " + `${this.props.apiKey}`)
-    console.log("pageSize = " + `${this.props.pageSize}`)
-
-
-    console.log("cdm Over")
-
-    // let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`
-    let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=${this.props.apiKey}&page=1&pageSize=${this.props.pageSize}`
-
-    let data = await fetch(url);
-    console.log("Fetched data")
-    
-    let parsedData = await data.json();
-    console.log("Parsed data")
-
-  
-    
-    //
-    
-    this.setState({
-      articles:parsedData.articles,
-   
-      totalResults:parsedData.totalResults,
-      loading:false,      
-    })
-
-    console.log("articles!!!!!!!! = " + `${this.state.articles}`)
+    this.updateNews();
     
 
   }
